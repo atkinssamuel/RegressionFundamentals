@@ -83,8 +83,17 @@ The standard error of a regression tells us how far the data points are from the
 \noindent
 We use $N-2$ adjustment instead of $N$ because we estimated two parameters to determine the regression model.
 
-\subsubsection*{T-Statistic and P-Value}
-The t-statistic is a statistic that we compute when we are trying to compare the means of two samples. Using the t-statistic we can compute the p-value which is the likelihood that we osberved this data in a world in which the null hypothesis is true. In the context of linear regression we use the t-statistic and the p-value to determine if there is a statistically significant difference between a model with a slope of 0 and the observed data. If the difference is statistically significant then we reject the null hypothesis and determine that the two variables are not linearly independent. To calculate the $N-2$ d.o.f. t-statistic we use the following equation:
+
+
+\section{Dependence Tests}
+\subsection{Numerical-Numerical}
+\subsubsection*{T-Test}
+The t-statistic is a statistic that we compute when we are trying to compare the means of two samples. Using the t-statistic we can compute the p-value which is the likelihood that we osberved this data in a world in which the null hypothesis is true. Outside of linear regression the t-statistic is used to determine if the difference between a sample mean and the mean of the population is statistically significant. To compute this statistic we can use the following equation:
+
+\[t = \frac{\overline{x} - \mu}{\frac{s}{\sqrt{n}}}\]
+
+\noindent
+$\overline{x}$ is the sample mean, $\mu$ is the population mean, $s$ is the standard deviation, and $n$ is the number of observations. This statistic has $N - 1$ degrees of freedom. In the context of linear regression, we use the t-statistic and the p-value to determine if there is a statistically significant difference between a model with a slope of 0 and the observed data. In this case, the null hypothesis is that the slope of the linear relationship between the independent and dependent variable is equal to 0. To calculate the $N-2$ degree of freedom t-statistic we use the following equation:
 
 \[t_0 = \frac{\hat{\beta}_1}{\sqrt{\hat{\sigma}^2/S_{xx}}}\]
 
@@ -98,4 +107,107 @@ When comparing two variables and testing for linearity we assume a linear relati
 
 \noindent
 From the t-statistic we can compute the p-value and threshold on some pre-determined cutoff. We can also threshold the t-statistic itself to see if we should reject the null hypothesis or not. 
+
+
+
+\subsection{Categorical-Categorical}
+\subsubsection*{Chi-Squared Test}
+The Pearson's Chi-Squared test is a statistical test with two applications. The first application is called a \textit{goodness of fit} test. This test is used to test if sample data conforms to a distribution from a certain population. I.e., this test determines if your sample data represents the data you would expect to find in the actual population. The null hypothesis for the chi-squared goodness of fit test is that the data comes from the defined distribution. The alternate hypothesis is, of course, that the data did not come from that distribution. The formula for computing the chi-squared value is:
+
+\[\chi^2_c = \sum_{i=1}^N\frac{(O_i - E_i)^2}{E_i}\]
+
+\noindent
+$O_i$ represents each categorical value and $E_i$ represents the expected categorical value. Use the chi-squared goodness of fit test when the sampling method is simple random sampling, the variable under study is categorical, and the expected value of the number of each sample observations in each level of the variable is at least 5. Note that the degrees of freedom for this test is equal to $N - 1$. 
+
+\vspace{3mm}
+\textbf{Examples:}
+\begin{enumerate}
+\item
+https://stattrek.com/chi-square-test/goodness-of-fit.aspx
+\item
+https://www.khanacademy.org/math/statistics-probability/inference-categorical-data-chi-square-
+
+tests/chi-square-goodness-of-fit-tests/v/pearson-s-chi-square-test-goodness-of-fit
+\end{enumerate}
+
+We can also use the chi-squared distribution to perform a chi-square test for independence. We perform this test to compare two categorical variables from a single population to determine if there is significant association between the two variables. The null hypothesis for this test is that the two categorical variables are independent. Thus, the alternate hypothesis is that they are associated with each other. We use this test when the sampling method is simple random sampling, the variables in question are categorical, and the expected frequency count for each cell in the \textit{contingency table} is at least 5. A contingency table is a table summarizing the frequencies of two categorical variables:
+\begin{center}
+\begin{tabular}{ c | c c c }
+    \hspace{1mm} & Apples & Oranges & Pears \\ 
+    \hline
+    Males & 10 & 13 & 2 \\  
+    Females & 5 & 9 & 5   
+\end{tabular}
+\end{center}
+
+\noindent
+The first step is to compute the degrees of freedom. The degrees of freedom will later be used in conjunction with the chi-squared value to determine the p-value. 
+
+\[DF = (N_r - 1) \cdot (N_c - 1)\]
+
+\noindent
+$N_r$ is the number of levels for the first categorical variable and $N_c$ is the number of levels for the second categorical variable. After computing the degrees of freedom, the expected frequencies for every level of the first and second categorical variables must be computed:
+
+\[E_{r, c} = \frac{(n_r \cdot n_c)}{N}\]
+
+\noindent
+$n_r$ is the total number of $r$-th level sample observations of the first categorical variable and $n_c$ is the total number of $c$-th level sample observations of the second categorical variable. $N$ is the sample size. After these values are computed for all $r$ and $c$, the chi-squared statistic can be computed:
+
+\[\chi^2 = \sum_{r, c}\frac{(O_{r, c} - E_{r, c})^2}{E_{r, c}}\]
+
+\noindent
+The observed frequency at $r$ and $c$, $E_{r, c}$, is the total number of observations in which both $r$ and $c$ were observed simultaneously. After computing the chi-squared value we can use this value in conjunction with the number of degrees of freedom to determine the p-value. From the p-value we can then decide if we should reject or accept the null hypothesis. 
+
+\subsection{Numerical-Categorical}
+\subsubsection*{ANOVA}
+Typically, we use a one way ANalysis Of VAriance (ANOVA) to determine if the difference between the means of two or more groups is statistically significant. To do this, we compute the F-statistic. The F-statistic is the ratio of the variance of the between group means to the mean of the within group variances. If the variance between the samples is greater than the variance within the samples then the samples are not drawn from the same population. The null hypothesis for an ANOVA is that all of the population means are equal. The alternative hypothesis is that at least one of the means is different. We can use an ANOVA when the populations from which the samples were obtained are approximately normal, the samples are independent, and the variances of the populations are equal. To conduct an ANOVA, we must first determine the grand mean, $x_{GM}$, of the samples, the sum of squares total, $SS(T)$, the within group variation, $SS(W)$, and the between group variation, $SS(B)$:
+
+\[\overline{x}_{GM} = \sum_{i=1}^{N}\frac{x_i}{N}\]
+
+\noindent
+The grand mean is the mean of all of the elements from all of the samples mixed into one group.
+
+\[SS(T) = \sum_{i=1}^N(x_i - \overline{x}_{GM})^2\]
+\[DF(T) = M \cdot N - 1\]
+
+\noindent
+The total variation is the variation of all of the samples in this collective group. The number of degrees of freedom for this calculation is equal to the number of samples, $M$, times the total number of elements in each sample, $N$, minus 1. I.e., $DF = M \cdot N - 1$. This is because if we knew the grand mean and we knew all of the data points except for 1 we could figure out the last one. 
+
+\[SS(W) = \sum_{i, c}(x_{i, c} - \overline{x}_c)^2\]
+\[DF(W) = M \cdot (N - 1)\]
+
+\noindent
+The within group variation is the variation that exists within each sample. For each sample group, we have $N - 1$ degrees of freedom because if we know the means of each group and $N - 1$ of the elements in each group, we could determine the final element. If we have $M$ groups, we have $M \cdot (N - 1)$ degrees of freedom. The within group variation is calculated for each sample, $c$, and aggregated.
+
+\[SS(B) = \sum_{c} N_c \cdot (\overline{x}_c - \overline{x}_{GM})^2\]
+\[DF(B) = M - 1\]
+
+\noindent
+The sum of squares between is the total variation due to the differences between the means. To compute this, we sum over all of the squared differences between the means of each sample and the grand mean $N_c$ times for each sample group, $c$. For this calculation, assuming we know the mean of means, we can calculate one of the sample means if we have the other two sample means. Thus, the number of degrees of freedom in this calculation is equal to $M - 1$. Given the above metrics, an interesting relationship occurs:
+
+\[SS(T) = SS(W) + SS(B)\]
+
+\noindent
+Thus, the total variation in the data can be described as the sum of the variation within each of these groups plus the sum of the variation between the groups. This is useful because it shows that we can split up the total variation of the samples into the variations between the groups and the variation within the groups. The degrees of freedom of the calculations of the variations also add up:
+
+\[DF(W) + DF(B) = M \cdot (N - 1) + (M - 1) = M \cdot N - M + M - 1 = M \cdot N - 1 = DF(T)\]
+
+\noindent
+Using the variations defined above, we can compute the F-statistic:
+
+\[F  = \frac{\frac{SS(B)}{DF(B)}}{\frac{SS(W)}{DF(W)}}\]
+
+\noindent
+If the numerator is greater than the denominator then the variation present in the data is due primarily to the variation between the groups. Thus, a large F-statistic indicates that the considered samples do not have the same mean. Conversely, an F-statistic less than 1 shows that the variation of the data is explained more so by the variation within each sample. Thus, it is more likely that the samples have the same mean. Using the F-statistic we can compute the p-value. From the p-value and our threshold value (typically 0.05), we can determine if the observed results are statistically significant. Note that the F table is dependent on both the degrees of freedom of the numerator ($DF(B)$) and the denominator ($DF(W)$). 
+
+\noindent
+When comparing a numerical and categorical variable, we split the numerical variable up into the various categories delineated by the unique values of the categorical variable. Then, to determine if the numerical and categorical variable are dependent, we conduct an ANOVA.  
+
+\vspace{3mm}
+\textbf{Explanations:}
+\begin{enumerate}
+\item https://people.richland.edu/james/lecture/m113/anova.html
+\item https://www.khanacademy.org/math/statistics-probability/analysis-of-variance-anova-library/
+\end{enumerate}
+
 \end{document}

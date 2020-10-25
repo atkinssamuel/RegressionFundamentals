@@ -10,6 +10,37 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{mathtools}
+
+% For code styles:
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
@@ -128,6 +159,8 @@ https://stattrek.com/chi-square-test/goodness-of-fit.aspx
 https://www.khanacademy.org/math/statistics-probability/inference-categorical-data-chi-square-
 
 tests/chi-square-goodness-of-fit-tests/v/pearson-s-chi-square-test-goodness-of-fit
+
+
 \end{enumerate}
 
 We can also use the chi-squared distribution to perform a chi-square test for independence. We perform this test to compare two categorical variables from a single population to determine if there is significant association between the two variables. The null hypothesis for this test is that the two categorical variables are independent. Thus, the alternate hypothesis is that they are associated with each other. We use this test when the sampling method is simple random sampling, the variables in question are categorical, and the expected frequency count for each cell in the \textit{contingency table} is at least 5. A contingency table is a table summarizing the frequencies of two categorical variables:
@@ -209,5 +242,63 @@ When comparing a numerical and categorical variable, we split the numerical vari
 \item https://people.richland.edu/james/lecture/m113/anova.html
 \item https://www.khanacademy.org/math/statistics-probability/analysis-of-variance-anova-library/
 \end{enumerate}
+
+\section{Feature Selection}
+\subsection{SciKit Learn}
+SciKit Learn allows us to quickly select features based on a wide variety of univariate statistical tests. We can remove all but the $k$ highest scoring features or all but the features in a pre-defined user-specified percentage of features subject to a statistical test (e.g. $\chi^2$). 
+
+
+\section{Model Validation}
+\subsection{Performance Metrics}
+
+\subsection{Multi-Class Classification}
+Using the softmax function we can generate probabilistic predictions. We can then choose to penalize these predictions in any way we see fit. Naively, we can consider the accuracy calculated by taking the sum of all of the correct predictions and dividing by the total number of predictions. Unfortunately, this metric does not make distinctions between classes. A correct answer for 'Class A' is weighted the same as a correct answer for 'Class B' and 'Class C'. But what if there are 100 'Class A' targets and only 5 'Class B' and 'Class C' targets? A model that never predicted 'Class C' or 'Class B' would do well. 
+
+\subsubsection{Micro Multi-Class Accuracy}
+To compute this accuracy we calculate the total number accurate predictions for each class and then divide by the total number of false predictions for each class. 
+
+\subsubsection{Micro vs. Macro Metrics}
+If we have a dataset with balanced data then the accuracy metric that we use isn't entirely relevant. Since the target variable has a similar number of elements for each category biasing towards the categories with more elements doesn't have much of an impact.
+
+\vspace{3mm}
+\noindent
+If our dataset has a significant imbalance in the target variable then we have to decide whether we want a model that is biased towards the most populated targets or whether we want a model that is biased to the least populated targets (and as a result, is not biased towards the most populated targets). This choice is situational and is dependent not on the data, but on the context surrounding the data. 
+
+If we wish to bias our model to more populated targets we choose a micro metric. Conversely, if we wish to bias our model to less populated targets we choose a macro metric. 
+
+\subsubsection{}
+
+
+% \begin{lstlisting}[language=Python, caption=Python example]
+%     import numpy as np
+        
+%     def incmatrix(genl1,genl2):
+%         m = len(genl1)
+%         n = len(genl2)
+%         M = None #to become the incidence matrix
+%         VT = np.zeros((n*m,1), int)  #dummy variable
+        
+%         #compute the bitwise xor matrix
+%         M1 = bitxormatrix(genl1)
+%         M2 = np.triu(bitxormatrix(genl2),1) 
+    
+%         for i in range(m-1):
+%             for j in range(i+1, m):
+%                 [r,c] = np.where(M2 == M1[i,j])
+%                 for k in range(len(r)):
+%                     VT[(i)*n + r[k]] = 1;
+%                     VT[(i)*n + c[k]] = 1;
+%                     VT[(j)*n + r[k]] = 1;
+%                     VT[(j)*n + c[k]] = 1;
+                    
+%                     if M is None:
+%                         M = np.copy(VT)
+%                     else:
+%                         M = np.concatenate((M, VT), 1)
+                    
+%                     VT = np.zeros((n*m,1), int)
+        
+%         return M
+% \end{lstlisting}
 
 \end{document}

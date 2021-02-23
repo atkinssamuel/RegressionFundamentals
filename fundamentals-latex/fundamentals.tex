@@ -236,6 +236,7 @@ If the numerator is greater than the denominator then the variation present in t
 \noindent
 When comparing a numerical and categorical variable, we split the numerical variable up into the various categories delineated by the unique values of the categorical variable. Then, to determine if the numerical and categorical variable are dependent, we conduct an ANOVA.  
 
+
 \vspace{3mm}
 \textbf{Explanations:}
 \begin{enumerate}
@@ -243,62 +244,139 @@ When comparing a numerical and categorical variable, we split the numerical vari
 \item https://www.khanacademy.org/math/statistics-probability/analysis-of-variance-anova-library/
 \end{enumerate}
 
-\section{Feature Selection}
-\subsection{SciKit Learn}
-SciKit Learn allows us to quickly select features based on a wide variety of univariate statistical tests. We can remove all but the $k$ highest scoring features or all but the features in a pre-defined user-specified percentage of features subject to a statistical test (e.g. $\chi^2$). 
-
-
-\section{Model Validation}
 \subsection{Performance Metrics}
-
-\subsection{Multi-Class Classification}
-Using the softmax function we can generate probabilistic predictions. We can then choose to penalize these predictions in any way we see fit. Naively, we can consider the accuracy calculated by taking the sum of all of the correct predictions and dividing by the total number of predictions. Unfortunately, this metric does not make distinctions between classes. A correct answer for 'Class A' is weighted the same as a correct answer for 'Class B' and 'Class C'. But what if there are 100 'Class A' targets and only 5 'Class B' and 'Class C' targets? A model that never predicted 'Class C' or 'Class B' would do well. 
-
-\subsubsection{Micro Multi-Class Accuracy}
-To compute this accuracy we calculate the total number accurate predictions for each class and then divide by the total number of false predictions for each class. 
-
-\subsubsection{Micro vs. Macro Metrics}
-If we have a dataset with balanced data then the accuracy metric that we use isn't entirely relevant. Since the target variable has a similar number of elements for each category biasing towards the categories with more elements doesn't have much of an impact.
+\vspace{3mm}
+\noindent
+\textbf{Accuracy}
 
 \vspace{3mm}
 \noindent
-If our dataset has a significant imbalance in the target variable then we have to decide whether we want a model that is biased towards the most populated targets or whether we want a model that is biased to the least populated targets (and as a result, is not biased towards the most populated targets). This choice is situational and is dependent not on the data, but on the context surrounding the data. 
+Measures the total accuracy of the generated model on some data. This metric can be misleading because it weights each correct prediction in the same way. If the data is skewed in a major way then a weak model can obtain very high accuracy.
 
-If we wish to bias our model to more populated targets we choose a micro metric. Conversely, if we wish to bias our model to less populated targets we choose a macro metric. 
+\[A = \frac{\textnormal{Number of correct predictions}}{\textnormal{Total number of predictions}}\]
 
-\subsubsection{}
+\vspace{3mm}
+\noindent
+\textbf{Confusion Matrix}
+
+\vspace{3mm}
+\noindent
+This performance visualization tool delineates the true postives, true, negatives, false positives, and false negatives for all of the predicted categorical values. This tool is valuable because it speaks to which classes the model is favoring. It also characterizes how well the model is predicting each class. An example of a multi-class confusion matrix is shown below:
+
+\vspace{-2mm}
+\begin{center}
+\includegraphics{confusion_matrix.png}
+
+\textit{Figure 1: Confusion matrix example}
+\end{center}
+
+\noindent The diagonal elements of the confusion matrix are the occurences where the predictions matched the target values. We can use the confusion matrix to generate other metrics such as precision.
 
 
-% \begin{lstlisting}[language=Python, caption=Python example]
-%     import numpy as np
+\vspace{3mm}
+\noindent
+\textbf{Precision}
+
+\vspace{3mm}
+\noindent
+The precision of a given class is \textit{the number of times that class was correctly predicted divided by the total number of predictions for that particular class}:
+
+\[P = \frac{TP}{TP + FP}\]
+
+\noindent
+This metric is particularly valuable if we know the value of predicting various features. If predicting a certain column is particularly important we can compute the precision of our model on that column and assess our model in that way. Using the confusion matrix we can extract the total number of predictions for a given feature by summing along that prediction row. We can easily extract the number of accurate predictions for feature $i$ by considering the $i$-th column in the $i$-th row. 
+
+\vspace{3mm}
+\noindent
+If we want to minimize the number of false positives for a given target we will want to maximize the precision of our model. 
+
+
+\vspace{3mm}
+\noindent
+\textbf{Recall}
+
+\vspace{3mm}
+\noindent
+The recall of a given class is \textit{the number of times that class was correctly predicted divided by the total number of times that class was actually true}:
+
+\[R = \frac{TP}{TP + FN}\]
+
+\noindent
+We can obtain this metric by extracting the diagonal element associated with the $i$-th row in question and dividing by the sum along the $i$-th column. 
+
+\vspace{3mm}
+\noindent
+If we want to minimize the number of false negatives for a given target we will want to maximize the recall of our model. 
+
+
+\vspace{3mm}
+\noindent
+\textbf{F-Measure}
+
+
+\vspace{3mm}
+\noindent
+The F-Measure combines precision and recall for a given feature into one metric. A model that has excellent precision and excellent recall will have an F-Measure that approaches 1. A model with weak precision or weak recall will have a resultant F-Measure that is closer to 0. To calculate the F-Measure of a feature we use the following formula:
+
+\[F = \frac{2 \cdot P \cdot R}{P + R}\]
+
+
+% \section{Feature Selection}
+% \subsection{SciKit Learn}
+% SciKit Learn allows us to quickly select features based on a wide variety of univariate statistical tests. We can remove all but the $k$ highest scoring features or all but the features in a pre-defined user-specified percentage of features subject to a statistical test (e.g. $\chi^2$). 
+
+
+% \section{Model Validation}
+% \subsection{Performance Metrics}
+
+% \subsection{Multi-Class Classification}
+% Using the softmax function we can generate probabilistic predictions. We can then choose to penalize these predictions in any way we see fit. Naively, we can consider the accuracy calculated by taking the sum of all of the correct predictions and dividing by the total number of predictions. Unfortunately, this metric does not make distinctions between classes. A correct answer for 'Class A' is weighted the same as a correct answer for 'Class B' and 'Class C'. But what if there are 100 'Class A' targets and only 5 'Class B' and 'Class C' targets? A model that never predicted 'Class C' or 'Class B' would do well. 
+
+% \subsubsection{Micro Multi-Class Accuracy}
+% To compute this accuracy we calculate the total number accurate predictions for each class and then divide by the total number of false predictions for each class. 
+
+% \subsubsection{Micro vs. Macro Metrics}
+% If we have a dataset with balanced data then the accuracy metric that we use isn't entirely relevant. Since the target variable has a similar number of elements for each category biasing towards the categories with more elements doesn't have much of an impact.
+
+% \vspace{3mm}
+% \noindent
+% If our dataset has a significant imbalance in the target variable then we have to decide whether we want a model that is biased towards the most populated targets or whether we want a model that is biased to the least populated targets (and as a result, is not biased towards the most populated targets). This choice is situational and is dependent not on the data, but on the context surrounding the data. 
+
+% If we wish to bias our model to more populated targets we choose a micro metric. Conversely, if we wish to bias our model to less populated targets we choose a macro metric. 
+
+% \subsubsection{}
+
+
+% % \begin{lstlisting}[language=Python, caption=Python example]
+% %     import numpy as np
         
-%     def incmatrix(genl1,genl2):
-%         m = len(genl1)
-%         n = len(genl2)
-%         M = None #to become the incidence matrix
-%         VT = np.zeros((n*m,1), int)  #dummy variable
+% %     def incmatrix(genl1,genl2):
+% %         m = len(genl1)
+% %         n = len(genl2)
+% %         M = None #to become the incidence matrix
+% %         VT = np.zeros((n*m,1), int)  #dummy variable
         
-%         #compute the bitwise xor matrix
-%         M1 = bitxormatrix(genl1)
-%         M2 = np.triu(bitxormatrix(genl2),1) 
+% %         #compute the bitwise xor matrix
+% %         M1 = bitxormatrix(genl1)
+% %         M2 = np.triu(bitxormatrix(genl2),1) 
     
-%         for i in range(m-1):
-%             for j in range(i+1, m):
-%                 [r,c] = np.where(M2 == M1[i,j])
-%                 for k in range(len(r)):
-%                     VT[(i)*n + r[k]] = 1;
-%                     VT[(i)*n + c[k]] = 1;
-%                     VT[(j)*n + r[k]] = 1;
-%                     VT[(j)*n + c[k]] = 1;
+% %         for i in range(m-1):
+% %             for j in range(i+1, m):
+% %                 [r,c] = np.where(M2 == M1[i,j])
+% %                 for k in range(len(r)):
+% %                     VT[(i)*n + r[k]] = 1;
+% %                     VT[(i)*n + c[k]] = 1;
+% %                     VT[(j)*n + r[k]] = 1;
+% %                     VT[(j)*n + c[k]] = 1;
                     
-%                     if M is None:
-%                         M = np.copy(VT)
-%                     else:
-%                         M = np.concatenate((M, VT), 1)
+% %                     if M is None:
+% %                         M = np.copy(VT)
+% %                     else:
+% %                         M = np.concatenate((M, VT), 1)
                     
-%                     VT = np.zeros((n*m,1), int)
+% %                     VT = np.zeros((n*m,1), int)
         
-%         return M
-% \end{lstlisting}
+% %         return M
+% % \end{lstlisting}
 
 \end{document}
